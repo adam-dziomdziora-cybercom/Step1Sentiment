@@ -19,7 +19,7 @@ namespace Step1Sentiment {
             TrainTestData splitDataView = LoadData (mlContext);
             ITransformer model = BuildAndTrainModel (mlContext, splitDataView.TrainSet);
             Evaluate (mlContext, model, splitDataView.TestSet);
-        }
+            UseModelWithSingleItem(mlContext,model);        }
 
         public static TrainTestData LoadData (MLContext mlContext) {
             // Load from text file
@@ -74,5 +74,23 @@ namespace Step1Sentiment {
             Console.WriteLine ("=============== End of model evaluation ===============");
         }
 
+        private static void UseModelWithSingleItem (MLContext mlContext, ITransformer model) {
+            PredictionEngine<SentimentData, SentimentPrediction> predictionFunction =
+                mlContext.Model.CreatePredictionEngine<SentimentData, SentimentPrediction> (model);
+           
+            SentimentData sampleStatement = new SentimentData {
+                SentimentText = "this is outstading training with an amazing trainer"
+            };
+
+            var resultprediction = predictionFunction.Predict (sampleStatement);
+            Console.WriteLine ();
+            Console.WriteLine ("=============== Prediction Test of model with a single sample and test dataset ===============");
+
+            Console.WriteLine ();
+            Console.WriteLine ($"Sentiment: {resultprediction.SentimentText} | Prediction: {(Convert.ToBoolean(resultprediction.Prediction) ? "Positive" : "Negative")} | Probability: {resultprediction.Probability} ");
+
+            Console.WriteLine ("=============== End of Predictions ===============");
+            Console.WriteLine ();
+        }
     }
 }
