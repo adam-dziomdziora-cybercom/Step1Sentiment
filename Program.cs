@@ -18,6 +18,7 @@ namespace Step1Sentiment {
             MLContext mlContext = new MLContext ();
             TrainTestData splitDataView = LoadData (mlContext);
             ITransformer model = BuildAndTrainModel (mlContext, splitDataView.TrainSet);
+            Evaluate (mlContext, model, splitDataView.TestSet);
         }
 
         public static TrainTestData LoadData (MLContext mlContext) {
@@ -58,6 +59,19 @@ namespace Step1Sentiment {
             stopWatch.Stop ();
             Console.WriteLine ($"=============== End of training, taken {stopWatch.ElapsedMilliseconds}ms ===============");
             return model;
+        }
+
+        public static void Evaluate (MLContext mlContext, ITransformer model, IDataView splitTestSet) {
+            Console.WriteLine ("=============== Evaluating Model accuracy with Test data===============");
+            IDataView predictions = model.Transform (splitTestSet);
+            CalibratedBinaryClassificationMetrics metrics = mlContext.BinaryClassification.Evaluate (predictions, "Label");
+            Console.WriteLine ();
+            Console.WriteLine ("Model quality metrics evaluation");
+            Console.WriteLine ("--------------------------------");
+            Console.WriteLine ($"Accuracy: {metrics.Accuracy:P2}");
+            Console.WriteLine ($"Auc: {metrics.AreaUnderRocCurve:P2}");
+            Console.WriteLine ($"F1Score: {metrics.F1Score:P2}");
+            Console.WriteLine ("=============== End of model evaluation ===============");
         }
 
     }
