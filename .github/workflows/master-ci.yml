@@ -1,0 +1,21 @@
+name: Docker Master CI
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Build Docker images
+        run: |
+          docker build . -t step0regression
+
+      - name: Push Docker images
+        run: |
+          docker run step0regression
