@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  step1sentiment:
+    image: ${DOCKER_REGISTRY-}step1sentiment
+    build:
+      context: .
+      dockerfile: Dockerfile
