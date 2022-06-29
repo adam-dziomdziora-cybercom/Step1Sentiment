@@ -14,8 +14,8 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker build . -t step0regression
+          docker build . -t step1-sentiment
 
-      - name: Push Docker images
+      - name: Run Docker images
         run: |
-          docker run step0regression
+          docker run step1-sentiment

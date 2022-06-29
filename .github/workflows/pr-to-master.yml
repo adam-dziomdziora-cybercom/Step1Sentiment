@@ -19,8 +19,8 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker build . -t step0regression:${{ env.BRANCH_NAME }}
+          docker build . -t step1-sentiment:${{ env.BRANCH_NAME }}
 
-      - name: Push Docker images
+      - name: Run Docker images
         run: |
-          docker run step0regression:${{ env.BRANCH_NAME }}
+          docker run step1-sentiment:${{ env.BRANCH_NAME }}
